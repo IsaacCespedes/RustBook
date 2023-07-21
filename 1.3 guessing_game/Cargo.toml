@@ -5,6 +5,25 @@ edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+# semantic versioning
+# cargo docs say a breaking change can be major or minor
+# major.minor.patch or  0.major.minor or 0.0.major
+# ^ means minor or patch can be updated (default, so 0.8.5 is the same as ^0.8.5)
+# ~ means patch can be updated
+# * means any version can be used
+# = means exact version
+# > means greater than
+# < means less than
+# >= means greater than or equal to
+# <= means less than or equal to
+# ! means not equal to
+# - means range
+# || means or
+# && means and
+# Cargo uses the convention that only changes in the left-most non-zero component are considered incompatible
+# 0.1.0 and 0.1.1 are compatible
+# Cargo will use the latest compatible version
+
 [dependencies]
 rand = "0.8.5"
 

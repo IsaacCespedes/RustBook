@@ -8,6 +8,8 @@ fn main() {
     // PascalCase for types
     // SCREAMING_SNAKE_CASE for constants
 
+    // scalars: ints, floats (f64 is default), bools, chars
+
     // let keyword can only be used in functioons
     // immutable by default
     // i32 is default integer type
@@ -26,6 +28,7 @@ fn main() {
     // works to change a variable's type
     // instead of declaring a new variable
     // (e.g. i32 to string)
+    // note: can not be mutable, and must use let keyword
     let a: u32 = a + 1;
 
     {
@@ -40,8 +43,11 @@ fn main() {
     b = 6;
     println!("The value of b is: {b}");
 
-    // tuples
+    // tuples, destructuring
     let tup = (500, 6.4, 1);
+
+    // unit type, implicit when an expression does not return a value
+    let _unit_tup = ();
 
     // underscore to ignore unused variables
     let (_x, y, _z) = tup;
@@ -104,7 +110,7 @@ fn main() {
 
     // eval types must match in conditional expressions
     let condition = true;
-    let cond_num = if condition { 5 } else { 6 };
+    let cond_num = if condition { 5 } else { 6 }; // cond_num = 5, note cases both return ints
 
     println!("The value of number is: {cond_num}");
 
@@ -115,7 +121,7 @@ fn main() {
         counter += 1;
 
         if counter == 10 {
-            break counter * 2;
+            break counter * 2; // break can return a value
         }
     };
 
@@ -150,7 +156,7 @@ fn main() {
         loop_num -= 1;
     }
 
-    // ranges are preferred
+    // ranges are more common
     for number in (1..=3).rev() {
         println!("{number}!");
     }
@@ -175,7 +181,8 @@ fn print_labeled_measurement(value: i32, unit_label: char) {
     println!("The measurement is: {value}{unit_label}");
 }
 
-// return value - without semicolon
+// return value - expression, without semicolon
+// a semicolon turns an expression into a statement, which will return the unit type ()
 fn add_five(value: i32) -> i32 {
     value + 5
 }
