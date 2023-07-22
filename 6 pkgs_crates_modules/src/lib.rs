@@ -56,16 +56,22 @@ mod back_of_house {
 }
 
 // use keyword is like a symbolic link
-// similar to use keyword in c++
+// similar to using keyword in c++
 // this shortcut is limited to the scope
 // an idiomatic way to bring a function into scope is to specify the parent
 use crate::front_of_house::hosting;
+// vs use crate::front_of_house::hosting::add_to_waitlist;
 
 // example of aliasing with `as` keyword,
 // another idiomatic way to bring a function into scope
 // use crate::front_of_house::hosting as hosting_alias;
 
+// for structs, enums, and other items
+// the idiomatic import specifies the full path
+// e.g. use std::collections::HashMap;
+
 // `pub use` allows for re-exporting
+// this allows for clients to import with a different path
 
 // nested paths
 // use std::{cmp::Ordering, io};

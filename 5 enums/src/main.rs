@@ -10,7 +10,11 @@ enum Coin {
     Nickel,
     Dime,
     Quarter(UsState), // enums can store data inside them
+                      // and each variant can store different types and amounts of data
 }
+
+// enums can also have impl blocks and methods
+// inside an enum method, self will be the value of the enum variant the method is being called on
 
 fn plus_one(x: Option<i32>) -> Option<i32> {
     match x {
@@ -31,12 +35,15 @@ fn value_in_cents(coin: Coin) -> u8 {
     }
 }
 
-// these two function are the same
+// these two functions are the same
+// Option is an enum of Some<T> and None (which has no data)
+// Rust does not offer the null value,
+// but it does have an enum that can encode the concept of a value being present or absent
 fn decr_twice_v1(n: u32) -> Option<u32> {
     match n {
         0 => None,
         1 => None,
-        n2 => Some(n2 - 2),
+        n2 => Some(n2 - 2), // catch all, n2 is the value of n
     }
 }
 fn decr_twice_v2(n: u32) -> Option<u32> {
@@ -105,6 +112,7 @@ fn main() {
 
     // borrow opt instead of moving it
     // opt became &opt
+    // and s became &String
     match &opt2 {
         Some(s) => println!("Some: {}", s),
         None => println!("None!"),
@@ -113,7 +121,9 @@ fn main() {
     println!("{:?}", opt2);
 
     // if let instead of single match
-    let config_max = Some(3u8);
+    // does not exhaustively check
+    // 3u8 is the unsigned 8-bit integer literal 3
+    let config_max: Option<u8> = Some(3u8);
     if let Some(max) = config_max {
         println!("The maximum is configured to be {}", max);
     }

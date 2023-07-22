@@ -8,7 +8,9 @@ struct User {
 }
 
 // tuple structs
+// used for naming purposes
 // these do not get coerced in function params
+
 struct Color(i32, i32, i32);
 struct Point(i32, i32, i32);
 
@@ -19,16 +21,30 @@ struct PointStruct {
 
 // unit-like structs
 // no fields
-// used as markers
+// used to define types with traits but no data
 struct UnitLikeStruct;
 
+// attribute to automatically implement the Debug trait
+// allows for printing of a struct or enum
+// in a debug format using the {:?} format specifier in println!
+// or {:#?} for pretty print
+
+// note: dbg! macro can also print
+// it takes ownership of the value passed in
+// and prints the line number and file where dbg! was called
+
+#[derive(Debug)]
 struct Rectangle {
     width: u32,
     height: u32,
 }
 
 impl Rectangle {
+    // functions inside an impl block are called methods (have self param)
+    // or associated functions (don't have self param)
+
     // &self is short for self : &Self
+    // self can be &mut self or self also
     fn area(&self) -> u32 {
         self.width * self.height
     }
@@ -48,6 +64,12 @@ impl Rectangle {
         }
     }
 
+    fn can_hold(&self, other: &Rectangle) -> bool {
+        self.width > other.width && self.height > other.height
+    }
+
+    // called like this
+    // Rectangle::square(3)
     fn square(size: u32) -> Self {
         Self {
             width: size,
@@ -58,6 +80,7 @@ impl Rectangle {
 
 fn main() {
     // all fields are mutable
+    // you can not mark a subset of fields as mutable
     let mut user1 = User {
         email: String::from("address@email.com"),
         username: String::from("username123"),
@@ -74,10 +97,12 @@ fn main() {
         username: String::from("secondusername123"),
     };
 
-    // spread operator is like js
+    // spread operator is like js (2 dots though)
     // spread must be last
     // user1 can't be used after this
     // since username (string in heap, no copy trait) was moved
+    // if username was a primitive, it would be copied
+    // and user1 could still be used
     let user3 = User {
         email: String::from("thirdaddress@email.com"),
         ..user1
@@ -96,6 +121,8 @@ fn main() {
     let x = &mut point.x; // p and p.x can not be used
                           // until x goes out of scope
                           // point.x += 1;
+                          // and like with tuples, the compiler considers all fields to be borrowed
+                          // when one field is borrowed in a function
     println!("point.x: {}", point.x);
     println!("point.y: {}", point.y);
 
@@ -131,6 +158,32 @@ fn main() {
 
     // let imm_rect_ref = &rect3;  // cannot borrow immutable as mutable
     // imm_rect_ref.set_width(50);
+
+    let rect4 = Rectangle {
+        width: 10,
+        height: 40,
+    };
+
+    let rect5 = Rectangle {
+        width: 60,
+        height: 45,
+    };
+
+    let max_rect = rect4.max(rect5);
+    println!("max rect: {:?}", max_rect);
+    // println!("rect 4 area: {}", rect4.area()); // error: rect4 was moved
+    // the same kind of error would happen with self references in methods
+    // in this case, the rect does not have heap data (e.g. String), so it can implement Copy trait
+    // with #[derive(Copy, Clone)] and then it would be copied instead of moved
+
+    // rust automatically inserts *s and &s as needed for method calls
+    let r = &mut Box::new(Rectangle {
+        width: 1,
+        height: 2,
+    });
+    let area1 = r.area();
+    let area2 = Rectangle::area(&**r);
+    assert_eq!(area1, area2);
 }
 
 // accessing borrowed struct fields does not incur a move
@@ -145,6 +198,7 @@ fn print_point(p: &PointStruct) {
 
 fn build_user(email: String, username: String) -> User {
     // field init shorthand
+    // instead of `username: username`, for example
     User {
         email,
         username,

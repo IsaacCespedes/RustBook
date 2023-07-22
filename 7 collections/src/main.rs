@@ -1,18 +1,22 @@
 fn main() {
+    // Vectors
+
     let mut v = vec![1, 2, 3, 4, 5];
+    // or Vec::new()
 
     // immutable reference
     // reference is required
-    // can not move out of vector with indexing
-    // since vectors can be reallocated for resizability
-    let first = &v[0];
+    // noncopyable types like String can not move out of vector with indexing
+    // vectors can be reallocated for resizability
+    let first = v[0]; // panics if out of bounds
+                      // v.get(0) // returns an Option<&T>
 
     // push requires a mutable reference
-    // argument is moved
+    // because it may need to reallocate
+    // argument is moved when String is pushed
     // v.push(6);
 
     println!("The first element is: {first}");
-
     // immutable iterator
     let v = vec![100, 32, 57];
     for n_ref in &v {
@@ -45,6 +49,8 @@ fn main() {
         SpreadsheetCell::Text(String::from("blue")),
         SpreadsheetCell::Float(10.12),
     ];
+
+    // Strings
 
     // Rust has only one string type in the core language,
     // which is the string slice str that is usually seen in its borrowed form &str
@@ -90,6 +96,7 @@ fn main() {
     // let h = s1[0]; // error: cannot index into a value of type `std::string::String`
 
     // string slicing is not advised because characters are not all one byte
+    // strings can b represented as bytes or chars
     let hi = "Здравствуйте";
     let s = &hi[0..4];
 
@@ -98,7 +105,8 @@ fn main() {
         println!("{c}");
     }
 
-    // hash maps
+    // Hash Maps
+
     // keys must be the same type
     // values must be the same type
 
@@ -114,6 +122,7 @@ fn main() {
     let mut scores = HashMap::new();
 
     scores.insert(String::from("Blue"), 10);
+    // scores.insert(String::from("Blue"), 30); // this would overwrite the previous value
     scores.insert(String::from("Yellow"), 50);
 
     let blue_team_name = String::from("Blue");
@@ -143,6 +152,8 @@ fn main() {
     }
 
     println!("{:?}", map);
+
+    // Exercises
 
     // mode
     let v = vec![1, 2, 3, 4, 5, 5, 5, 6, 7, 8];

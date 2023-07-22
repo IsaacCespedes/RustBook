@@ -16,12 +16,15 @@
 // A package can have multiple binary crates by placing files in the src/bin directory:
 // each file will be a separate binary crate.
 
-// A crate is the smallest amount of code that the Rust compiler considers at a time
+// A crate is a tree of modules and is the smallest amount of code that the Rust compiler considers at a time
 // A crate can come in one of two forms: a binary crate or a library crate.
 // most of the time a crate refers to a library crate
 // src/lib.rs is the crate root of a library crate with the same name as the package
 // src/main.rs is the crate root of a binary crate with the same name as the package
+// the crate root is the starting point of a crate’s module tree
+// even a single source file is considered a crate
 
+// modules control organication of paths
 // module paths can take two forms:
 
 // An absolute path is the full path starting from a crate root;

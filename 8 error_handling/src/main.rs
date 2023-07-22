@@ -51,7 +51,7 @@ fn main() {
     });
 }
 
-// the ? operator returns a value or errors, coverting to the calling function's return type
+// the ? operator returns a value or error, coverting to the calling function's return type
 // it can only be used in functions that return Result or Option
 // similar to Result,  with Options, if the value is None, the None will be returned early from the function at that point.
 fn read_username_from_file() -> Result<String, io::Error> {

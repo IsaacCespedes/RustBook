@@ -65,7 +65,7 @@ fn main() {
     // causes that data to be temporarily read-only until the reference is no longer used.
 
     // mutable vs immmutable references
-    // you can have 1 mutable reference or many immutable references
+    // you can have 1 mutable reference or many immutable (shared) references
     let mut vec: Vec<i32> = vec![1, 2, 3];
     // let num: &i32 = &vec[2];
     // *num += 1; // error: cannot assign to `*num` which is behind a `&` reference
