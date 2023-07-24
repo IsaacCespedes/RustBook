@@ -105,6 +105,21 @@ fn main() {
         println!("{c}");
     }
 
+    // string slices
+    // ("blue");
+    // (&String::from("abc")[0..1]);
+    // ("  hello there ".trim());
+    // ("nice weather".into());
+
+    // strings
+    // ("red".to_string());
+    // (String::from("hi"));
+    // ("rust is fun!".to_owned());
+    // ("nice weather".into());
+    // (format!("Interpolation {}", "Station"));
+    // ("Happy Monday!".to_string().replace("Mon", "Tues"));
+    // ("mY sHiFt KeY iS sTiCkY".to_lowercase());
+
     // Hash Maps
 
     // keys must be the same type
@@ -126,7 +141,7 @@ fn main() {
     scores.insert(String::from("Yellow"), 50);
 
     let blue_team_name = String::from("Blue");
-    // get returns a Option<&V> (reference)
+    // getreturns a Option<&V> (immutable reference)
     // copied returns a V
     let blue_score = scores.get(&blue_team_name).copied().unwrap_or(0);
 

@@ -106,6 +106,7 @@ fn main() {
     };
 
     // opt was moved into s, so it is no longer available
+    // Some (ref s) above would have borrowed s instead of moving it
     // println!("{:?}", opt);
 
     let opt2: Option<String> = Some(String::from("opt string 2"));
@@ -124,7 +125,23 @@ fn main() {
     // does not exhaustively check
     // 3u8 is the unsigned 8-bit integer literal 3
     let config_max: Option<u8> = Some(3u8);
+    match config_max {
+        Some(max) => println!("The maximum is configured to be {}", max),
+        _ => (),
+    }
+
     if let Some(max) = config_max {
         println!("The maximum is configured to be {}", max);
     }
+
+    if let Some(num) = some_function() {
+        println!("Some: {}", num);
+    } else {
+        println!("None!");
+    }
+}
+
+// some function that returns an Option<i32>
+fn some_function() -> Option<i32> {
+    Some(42)
 }

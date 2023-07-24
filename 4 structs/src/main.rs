@@ -12,6 +12,7 @@ struct User {
 // these do not get coerced in function params
 
 struct Color(i32, i32, i32);
+// let black = Color(0, 0, 0);
 struct Point(i32, i32, i32);
 
 struct PointStruct {
@@ -23,7 +24,9 @@ struct PointStruct {
 // no fields
 // used to define types with traits but no data
 struct UnitLikeStruct;
+// let unit_like_struct = UnitLikeStruct;
 
+// Attributes are metadata about pieces of Rust code
 // attribute to automatically implement the Debug trait
 // allows for printing of a struct or enum
 // in a debug format using the {:?} format specifier in println!

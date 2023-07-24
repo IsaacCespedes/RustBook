@@ -142,8 +142,15 @@ fn greet(g1: &String, g2: &String) {
 }
 
 // &String or String will be coerced to &str slice
+
+// this is because String implements the Deref trait
+
 // therefore &str is preferred over String for function arguments
 // slices are not heap allocated
+
+// note: the lifetimes of the return value and the parameters are inferred
+// fn first_word<'a>(s: &'a str) -> &'a str {
+
 fn first_word(s: &str) -> &str {
     let bytes = s.as_bytes();
 
