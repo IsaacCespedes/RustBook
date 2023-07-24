@@ -40,8 +40,14 @@
 // you can mutate the value inside the RefCell<T> even when the RefCell<T> is immutable
 // RefCell<T>  allows only single ownership over the data it holds
 // RefCell<T> is only for use in single-threaded scenarios
+// (Mutex<T> is the thread-safe version of RefCell<T>)
+// RefCell<t> tracks the count of immutable and mutable references at runtime
+// and follows the same borrowing rules as the compiler
+// incurs a small runtime performance penalty as a result of keeping track of the borrows at runtime
 
 enum List {
+    // to modify the value inside the RefCell<T>
+    // Cons(Rc<RefCell<i32>>, Rc<List>),
     Cons(i32, Box<List>),
     Nil,
 }
@@ -51,9 +57,34 @@ enum RCList {
     Nil,
 }
 
+#[derive(Debug)]
+enum CycleList {
+    CycleCons(i32, RefCell<Rc<CycleList>>),
+    CycleNil,
+}
+
+impl CycleList {
+    fn tail(&self) -> Option<&RefCell<Rc<CycleList>>> {
+        match self {
+            CycleCons(_, item) => Some(item),
+            CycleNil => None,
+        }
+    }
+}
+
+#[derive(Debug)]
+struct TreeNode {
+    value: i32,
+    parent: RefCell<Weak<TreeNode>>,
+    children: RefCell<Vec<Rc<TreeNode>>>,
+}
+
+use crate::CycleList::{CycleCons, CycleNil};
 use crate::List::{Cons, Nil};
 use crate::RCList::{Cons as RCCons, Nil as RCNil};
-use std::rc::Rc;
+use std::cell::RefCell;
+
+use std::rc::{Rc, Weak};
 
 fn main() {
     let list = Cons(1, Box::new(Cons(2, Box::new(Cons(3, Box::new(Nil))))));
@@ -81,4 +112,79 @@ fn main() {
     let rc_b = RCCons(3, Rc::clone(&rc_a)); // Rc::clone doesn't make a deep copy
     let rc_c = RCCons(4, Rc::clone(&rc_a)); // reference count is increased
     println!("reference count of rc_a: {}", Rc::strong_count(&rc_a)); // 3
+
+    // with RefCell
+    // let value = Rc::new(RefCell::new(5));
+
+    // let a = Rc::new(Cons(Rc::clone(&value), Rc::new(Nil)));
+
+    // let b = RCCons(Rc::new(RefCell::new(3)), Rc::clone(&a));
+    // let c = RCCons(Rc::new(RefCell::new(4)), Rc::clone(&a));
+
+    // // borrow_mut is called on value,
+    // // which returns a RefMut<T> smart pointer
+    // *value.borrow_mut() += 10;
+
+    // println!("a after = {:?}", a); // Cons(RefCell { value: 15 }, Nil)
+    // println!("b after = {:?}", b); // Cons(RefCell { value: 3 }, Cons(RefCell { value: 15 }, Nil))
+    // println!("c after = {:?}", c); // Cons(RefCell { value: 4 }, Cons(RefCell { value: 15 }, Nil))
+
+    let a = Rc::new(CycleCons(5, RefCell::new(Rc::new(CycleNil))));
+
+    println!("a initial rc count = {}", Rc::strong_count(&a));
+    println!("a next item = {:?}", a.tail());
+
+    let b = Rc::new(CycleCons(10, RefCell::new(Rc::clone(&a))));
+
+    println!("a rc count after b creation = {}", Rc::strong_count(&a));
+    println!("b initial rc count = {}", Rc::strong_count(&b));
+    println!("b next item = {:?}", b.tail());
+
+    // if let Some(link) = a.tail() {
+    //     *link.borrow_mut() = Rc::clone(&b); // link points to b, creating a cycle
+    // }
+
+    // println!("b rc count after changing a = {}", Rc::strong_count(&b));
+    // println!("a rc count after changing a = {}", Rc::strong_count(&a));
+
+    // Uncomment the next line to see that we have a cycle;
+    // it will overflow the stack
+    // println!("a next item = {:?}", a.tail());
+
+    // Weak references don’t express an ownership relationship,
+    // and their count doesn’t affect when an Rc<T> instance is cleaned up
+
+    // TreeNode in leaf now has two owners: leaf and branch
+    let leaf = Rc::new(TreeNode {
+        value: 3,
+        parent: RefCell::new(Weak::new()), // parent is a weak reference
+        children: RefCell::new(vec![]),
+    });
+
+    println!("leaf parent = {:?}", leaf.parent.borrow().upgrade());
+
+    let branch = Rc::new(TreeNode {
+        value: 5,
+        parent: RefCell::new(Weak::new()),
+        children: RefCell::new(vec![Rc::clone(&leaf)]),
+    });
+
+    *leaf.parent.borrow_mut() = Rc::downgrade(&branch); // downgrade creates a weak reference
+
+    println!("leaf parent = {:?}", leaf.parent.borrow().upgrade());
+
+    let r1 = Rc::new(0);
+    let r4 = {
+        let r2 = Rc::clone(&r1);
+        Rc::downgrade(&r2)
+    };
+    let r5 = Rc::clone(&r1);
+    let r6 = r4.upgrade();
+    println!(
+        "strong count {} weak count {}",
+        Rc::strong_count(&r1),
+        Rc::weak_count(&r1)
+    ); // 3 1
+       // The three strong refs are r1, r5, and r6.
+       // The one weak ref is r4. r2 is dropped at the end of its scope.
 }
