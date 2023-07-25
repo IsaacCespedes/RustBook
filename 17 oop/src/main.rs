@@ -6,7 +6,7 @@
 // Hint: have the state object responsible for what might change about the content,
 // but not responsible for modifying the Post.
 
-// - Implement states and behaviors "the Rust way", with types for different states
+// - Implement states and behaviors "the Rust way" (shown in the last chapter sections), with types for different states
 // - Do the first three challenges here following "the Rust way"
 
 // encapsulation through a public struct and private fields
