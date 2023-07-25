@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "fearless_concurrency"
+name = "patterns_matching"
 version = "0.1.0"
