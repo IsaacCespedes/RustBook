@@ -1,5 +1,8 @@
 fn main() {
-    let a = Box::new([0; 1_000_000]); // boxes are smart pointers
+    // 1_000 = 1,000
+    // boxes are smart pointers
+    // owner-type pointers
+    let a = Box::new([0; 1_000]);
 
     // If a variable owns a box
     // when Rust deallocates the variable's frame
@@ -23,14 +26,14 @@ fn main() {
     // clone can produce a copy of heap data
     // so the original variable can still be used
     let full_name_clone = full.clone();
-    println!("{full_name_clone}");
+    println!("{full_name_clone}, {full}");
 
     // functions can return ownership
     let string_from_function = send_out_string();
     println!("{string_from_function}");
 
     // References Are Non-Owning Pointers
-    // they change permissionss on paths
+    // they change permissions on paths
     // until the reference is no longer used
     // then the permissions are returned
     // references must always point to valid data
@@ -57,6 +60,8 @@ fn main() {
     println!("{} {}", c, x); // prints "3 4"
 
     // Pointer Safety Principle: data should never be aliased and mutated at the same time.
+    // i.e. assigning a box from one variable to another moves the box
+    // references however are non-owning pointers
 
     // permissions (read, write, own) are defined on paths and not just variables
     // e.g. a[0], *a, a.0, a.field, and combinations thereof
@@ -73,7 +78,7 @@ fn main() {
     println!("vec[1] {}", vec[1]); // vec is still readable
     let mut_num: &mut i32 = &mut vec[2];
     // vec.push(4); // cannot borrow `vec` as mutable more than once at a time
-    // println!("vec[1] {}", vec[1]); // vec is not still readable
+    // println!("vec[1] {}", vec[1]); // vec still can not be borrowed
     *mut_num += 1;
 
     // Permissions Are Returned At The End of a Reference's Lifetime
@@ -125,6 +130,8 @@ fn main() {
 
     // The modification to `d2` does not affect `d`
     // get_words returns a reference
+    // .into turns the value into the type expected by a parameter
+    // the value's type must implement the From trait
     assert!(!get_words(&d).contains(&"world".into()));
 }
 

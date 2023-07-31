@@ -238,7 +238,7 @@ fn do_twice(f: fn(i32) -> i32, arg: i32) -> i32 {
 
 // Macros: similar to C++
 // (metaprogramming, expands during preprocesing, before compiling)
-// e.g.  #[derive] too add attributes on structs and enums
+// e.g.  #[derive] to add attributes on structs and enums
 // attribute-like macros to define custom attributes
 // function-like macros. e.g. println! and vec!
 
@@ -332,7 +332,7 @@ fn main() {
         Point { x: 3, y: 3 }
     );
 
-    // funuction pointer
+    // function pointer
     let answer = do_twice(add_one, 5);
 
     println!("The answer is: {}", answer); // 12

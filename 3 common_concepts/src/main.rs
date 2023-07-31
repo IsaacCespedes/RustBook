@@ -39,9 +39,9 @@ fn main() {
     println!("The value of a in the outer scope is: {a}"); // 6
 
     let mut b = 5; // mutable variable
-    println!("The value of b is: {b}");
+    println!("The value of b is: {b}"); // 5
     b = 6;
-    println!("The value of b is: {b}");
+    println!("The value of b is: {b}"); // 6
 
     // tuples, destructuring
     let tup = (500, 6.4, 1);
@@ -152,13 +152,14 @@ fn main() {
     let mut loop_num = 5;
 
     while loop_num > 3 {
-        println!("{loop_num}!");
+        println!("while loooping {loop_num}!"); // 5, 4,
         loop_num -= 1;
     }
 
     // ranges are more common
+    // end range is not inclusive by default
     for number in (1..=3).rev() {
-        println!("{number}!");
+        println!(" reverse looping {number}!"); // 3, 2, 1
     }
 
     println!("LIFTOFF!!!");
@@ -166,6 +167,7 @@ fn main() {
     // for loop
     let elems = [10, 20, 30, 40, 50];
 
+    // for in
     for element in elems {
         println!("the value is: {element}");
     }

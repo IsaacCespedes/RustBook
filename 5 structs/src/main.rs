@@ -82,7 +82,7 @@ impl Rectangle {
 }
 
 fn main() {
-    // all fields are mutable
+    // all fields become mutable
     // you can not mark a subset of fields as mutable
     let mut user1 = User {
         email: String::from("address@email.com"),
@@ -121,11 +121,16 @@ fn main() {
     let unit_tuple = ();
 
     let mut point = PointStruct { x: 0, y: 0 };
-    let x = &mut point.x; // p and p.x can not be used
+    let x = &mut point.x; // if x was immutable, point and point.x can not be modified
                           // until x goes out of scope
-                          // point.x += 1;
-                          // and like with tuples, the compiler considers all fields to be borrowed
-                          // when one field is borrowed in a function
+                          // but point.y could
+    let x2 = &mut point;
+    x2.x = 5;
+    print_point(x2);
+
+    point.x += 1;
+    // and like with tuples, the compiler considers all fields to be borrowed
+    // when one field is borrowed through a function
     println!("point.x: {}", point.x);
     println!("point.y: {}", point.y);
 
@@ -148,7 +153,7 @@ fn main() {
         height: 50,
     };
 
-    // rect2.set_width(40); // cannot borrow immutable as mutable
+    // rect2.set_width(40); // cannot borrow as mutable
     // let imm_rect_ref = &rect2;
     // imm_rect_ref.set_width(40);
 

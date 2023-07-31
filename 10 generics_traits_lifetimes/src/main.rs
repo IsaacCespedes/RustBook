@@ -18,7 +18,7 @@ fn largest<T: Ord>(list: &[T]) -> &T {
     largest
 }
 
-// types must be the same for x and y
+// types must be the same for x and y here
 struct Point<T> {
     x: T,
     y: T,
@@ -30,6 +30,14 @@ impl<T> Point<T> {
         &self.x
     }
 }
+// methods for specific types
+// you can't implement methods for generic and specific types with the same name
+// the compiler can not pick which one to use when the specific type is used
+impl Point<f32> {
+    fn distance_from_origin(&self) -> f32 {
+        (self.x.powi(2) + self.y.powi(2)).sqrt()
+    }
+}
 
 // trait bound conditions on impl
 // only for types that implement the Display trait
@@ -39,10 +47,12 @@ impl<T: Display> Point<T> {
     }
 }
 
+// traits are similar to interfaces in other languages
 pub trait myTrait {
     fn myTraitMethod(&self) -> String;
 }
 
+// implement the trait for a specific type
 impl<T: Display> myTrait for T {
     fn myTraitMethod(&self) -> String {
         format!("Display String")
@@ -61,15 +71,6 @@ impl<T, U> MixPoint<T, U> {
             x: self.x,
             y: other.y,
         }
-    }
-}
-
-// methods for specific types
-// you can't implement methods for generic and specific types with the same name
-// the compiler can not pick which one to use when the specific type is used
-impl Point<f32> {
-    fn distance_from_origin(&self) -> f32 {
-        (self.x.powi(2) + self.y.powi(2)).sqrt()
     }
 }
 
@@ -124,7 +125,7 @@ fn returns_summarizable() -> impl Summary {
 // &'a i32     // a reference with an explicit lifetime
 // &'a mut i32 // a mutable reference with an explicit lifetime
 
-// in this function the lifetime of the reference returned
+// the lifetime of a reference returned
 // is the same as the smaller of the lifetimes of the values referred to by the arguments
 // the return value lifetime must match one of the input lifetimes
 fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {

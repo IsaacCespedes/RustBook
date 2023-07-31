@@ -101,6 +101,7 @@ fn main() {
 
     match opt {
         // _ became s, so opt was moved into s
+        // if it was Some(_), s would not be moved
         Some(s) => println!("Some: {}", s),
         None => println!("None!"),
     };

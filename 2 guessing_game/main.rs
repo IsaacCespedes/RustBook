@@ -10,6 +10,7 @@ pub struct Guess {
 
 impl Guess {
     pub fn new(value: i32) -> Guess {
+        // remember if statements do not wrap their expressions in parens in rust
         if value < 1 || value > 100 {
             panic!("Guess value must be between 1 and 100, got {}.", value);
         }

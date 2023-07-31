@@ -60,7 +60,7 @@ fn main() {
     // Rust strings are stored as a vector of bytes (u8)
     // but can be accessed as a string slice (&str)
 
-    let s = String::from("string with initial contents");
+    let s: String = String::from("string with initial contents");
 
     // strings are UTF-8 (unicode) encoded
     let hello = String::from("こんにちは");

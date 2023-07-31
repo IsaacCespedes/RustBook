@@ -24,7 +24,7 @@
 // the crate root is the starting point of a crate’s module tree
 // even a single source file is considered a crate
 
-// modules control organication of paths
+// modules control organization of paths
 // module paths can take two forms:
 
 // An absolute path is the full path starting from a crate root;
